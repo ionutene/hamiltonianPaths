@@ -1,8 +1,6 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-//
 
 import org.apache.commons.lang3.StringUtils;
+import sun.util.resources.cldr.bs.CalendarData_bs_BA;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -33,16 +31,35 @@ class Main {
                 for (String p : az) {
                     as.add(p);
                 }
-
             }
         }
+/*
+For the Set returned by finalInit(init()) we want to generate all possible hamiltonian paths
+following next rules:
+    - substrings of an selected string can not appear in next solutions:
+        Ex: ACAB = {AC, CA, AB} will not belong to any of {BAJH - HGFE - EDCD - DEFG - GHJA} Strings
+    - every solution will start the same character that previous solution ended:
+        Ex: ACAB - BAJH  (B == B)
+    - every path will start from point A and will finish in point A (it obvious from next examples)
+Expected solutions
+    ACAB - BAJH - HGFE - EDCD - DEFG - GHJA
+    AJAB - BACD - DEFG - GHJH - HGFE - EDCA
+    ABAC - CDED - DCAJ - JHGF - FEFG - GHJA
+    AJAC - CDEF - FGHJ - JHGF - FEDC - CABA
+    ACDC - CAJH - HGFE - EDEF - FGHJ - JABA*/
 
-
-      /*  az = removeSubstrings("abac", az);
-        for (String a : az) {
-            System.out.println(a);
-        }*/
-
+/* we got this
+* [acab] - [bajh] - [hgfe] - [edcd] - [defg] - [ghja] - ] //OK
+[ajab] - [bacd] - [dedc] - ] // will not explore further to get the real path throw "defg"
+[abac] - [cded] - [dcaj] - [jhgf] - [fefg] - [ghja] - ] //OK
+[ajac] - [cded] - [dcab] - ] //and so on...
+[acdc] - [cajh] - [hgfe] - [edef] - [fghj] - [jaba] - ]
+[acde] - [efed] - [dcab] - [baja] - ]
+[ajhg] - [gfgh] - [hjab] - [baca] - ]
+[abaj] - [jacd] - [dedc] - [jhgf] - [fefg] - ]
+[acaj] - [jhgf] - [fedc] - ]
+[ajhj] - [jacd] - [defg] - [ghgf] - [fedc] - [caba] -
+* */
 
     }
 
@@ -54,28 +71,14 @@ class Main {
 
             CopyOnWriteArrayList runFurther = result;
             runFurther = removeSubstrings(input, runFurther);
-
-/*
-            for (Object a : result)
-                System.out.print(a.toString() + " ");
-
-            System.out.println();
-*/
-
             for (Object walk : runFurther) {
                 if (runFurther.size() > 0 &&
                         walk.toString().charAt(0) == in.charAt(3) &&
                         walk.toString().charAt(3) != in.charAt(0) &&
-//                        walk.toString().charAt(2) != in.charAt(2) &&
-
                         runFurther.contains(walk)) {
 
                     recursiveSolve(walk, runFurther);
                 }
-                /*else
-                    if(in.charAt(3) != 'a'){
-                    recursiveSolve(input,result);
-                    }*/
             }
         }
 
@@ -112,14 +115,12 @@ class Main {
     }
 
     public static LinkedHashSet<String> finalInit(LinkedHashSet<String> liste) throws ConcurrentModificationException {
-//        Iterator<String> itr=liste.iterator();
         for (String a : liste) {
             if (a.substring(0, 2).equals(a.substring(2, 4))) {
                 System.out.println(a.substring(2) + " = " + a.substring(2, 4));
                 if (true) {
                     liste.remove(a);
                 }
-
             }
         }
         return liste;
@@ -131,11 +132,9 @@ class Main {
         Matcher regexMatcher;
         LinkedHashSet<String> numberList = new LinkedHashSet<String>();
         String var5 = "";
-//        System.out.println("Enter the number of rows and columns of first matrix");
         int var1 = 9;
         int var2 = var1;
         String[][] var10 = new String[var1][var2];
-//        System.out.println("Enter the elements of first matrix");
 
         String[][] myArrayA = new String[][]{
                 { "0", "b", "c", "0", "0", "0", "0", "0", "j" },
@@ -171,16 +170,13 @@ class Main {
             }
         }
 
-//        System.out.println("Enter the number of rows and columns of second matrix");
         int var3 = var1;
         int var4 = var1;
         if (var2 != var3) {
-//            System.out.println("Matrices with entered orders can't be multiplied with each other.");
         } else {
             String[][] var11 = new String[var3][var4];
             String[][] var12 = new String[var1][var4];
             String[][] var13 = new String[var1][var4];
-//            System.out.println("Enter the elements of second matrix");
 
             for (var6 = 0; var6 < var3; ++var6) {
                 for (var7 = 0; var7 < var4; ++var7) {
@@ -204,29 +200,16 @@ class Main {
                 }
             }
 
- /*           System.out.println("Product of entered matrices:First -");
-
-            for (var6 = 0; var6 < var1; ++var6) {
-                for (var7 = 0; var7 < var4; ++var7) {
-                    if (var12[var6][var7] == "")
-                        var12[var6][var7] = "0";
-                    System.out.print(var12[var6][var7] + "\t");
-                }
-
-//                System.out.print("\n");
-            }*/
-
             for (var6 = 0; var6 < var1; ++var6) {
                 for (var7 = 0; var7 < var4; ++var7) {
                     for (int var8 = 0; var8 < var3; ++var8) {
                         if (var12[var6][var8] != "0" && var11[var8][var7] != "0") {
 
                             regexMatcher = regex.matcher(var12[var6][var8]);
-                            while (regexMatcher.find()) {//Finds Matching Pattern in String
-                                matchList.add(regexMatcher.group(1));//Fetching Group from String
+                            while (regexMatcher.find()) {
+                                matchList.add(regexMatcher.group(1));
                             }
                             for (String a : matchList) {
-//                                System.out.print(a + " ");
 
                                 var5 += a + myArrayA[var8][var7] + "-";
                                 for (String penis : var5.split("-")) {
